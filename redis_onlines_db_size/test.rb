@@ -3,7 +3,7 @@ require 'benchmark'
 
 $r = Redis.new
 
-count = 9000
+count = 65000
 
 def decr_ip c
   "255.255.#{(255255 - c).to_s.insert(3,".")}"
