@@ -3,19 +3,19 @@ require 'benchmark'
 # add
 require 'hiredis'
 
-$rsingle = Redis.new db: 0, driver: :hiredis
+$rsingle = Redis.new db: 0, driver: :hiredis, path: "/tmp/redis.sock"
 #$rone    = Redis.new db: 1
 #$rtwo    = Redis.new db: 2
 #$rthree  = Redis.new db: 3
-$r1      = Redis.new db: 1, driver: :hiredis
-$r2      = Redis.new db: 2, driver: :hiredis
-$r3      = Redis.new db: 3, driver: :hiredis
-$r4      = Redis.new db: 4, driver: :hiredis
-$r5      = Redis.new db: 5, driver: :hiredis
-$r6      = Redis.new db: 6, driver: :hiredis
-$r7      = Redis.new db: 7, driver: :hiredis
-$r8      = Redis.new db: 8, driver: :hiredis
-$r9      = Redis.new db: 9, driver: :hiredis
+$r1      = Redis.new db: 1, driver: :hiredis, path: "/tmp/redis.sock"
+$r2      = Redis.new db: 2, driver: :hiredis, path: "/tmp/redis.sock"
+$r3      = Redis.new db: 3, driver: :hiredis, path: "/tmp/redis.sock"
+$r4      = Redis.new db: 4, driver: :hiredis, path: "/tmp/redis.sock"
+$r5      = Redis.new db: 5, driver: :hiredis, path: "/tmp/redis.sock"
+$r6      = Redis.new db: 6, driver: :hiredis, path: "/tmp/redis.sock"
+$r7      = Redis.new db: 7, driver: :hiredis, path: "/tmp/redis.sock"
+$r8      = Redis.new db: 8, driver: :hiredis, path: "/tmp/redis.sock"
+$r9      = Redis.new db: 9, driver: :hiredis, path: "/tmp/redis.sock"
 
 kv = []
 
