@@ -3,8 +3,13 @@
 require 'redis'
 require 'benchmark'
 
-# db: 0, driver: по-умолчанию, соединение: локальная петля
-$r = Redis.new
+# db: 0, driver: по-умолчанию, соединение: локальная петля, но(!)
+# нам нужа производительность - чтобы не ждать результатов теста долго, поэтому
+# кстати вот это: `driver: :hiredis, path: "/tmp/redis.sock"`
+#   увеличивает производительность чуть меньше чем в два раза
+require 'hiredis'
+
+$r = Redis.new driver: :hiredis, path: "/tmp/redis.sock"
 
 count = 65000
 
