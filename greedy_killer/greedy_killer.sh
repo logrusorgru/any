@@ -1,0 +1,1 @@
+kill `expr "$(top -bn1 | head -n8 | tail -n1)" : '\(.[0-9]*\)'`

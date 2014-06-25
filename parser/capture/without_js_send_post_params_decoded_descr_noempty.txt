@@ -1,0 +1,11 @@
+__VIEWSTATE= viewstate
+__PREVIOUSPAGE= previous_page
+__EVENTVALIDATION= event_validation
+ctl00$DebtorSearch1$inputDebtor=поиск
+ctl00$News1$hfMaxSize=3
+ctl00$cphBody$ucRegion$ddlBoundList=45
+ctl00$cphBody$ucTradeType$ddlBoundList=3
+ctl00$cphBody$cldrBeginDate$tbSelectedDate=22.05.2014
+ctl00$cphBody$cldrBeginDate$tbSelectedDateValue= эти поля необходимо заполнить
+ctl00$cphBody$cldrEndDate$tbSelectedDate=22.05.2014
+ctl00$cphBody$cldrEndDate$tbSelectedDateValue= эти поля необходимо заполнить
