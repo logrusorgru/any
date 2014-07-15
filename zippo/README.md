@@ -21,9 +21,9 @@ Beter then `.tar.gz`:
 
 A source file of this compressor:
 
-  -tar.gz-  | -ruby zlib-
----------------------------
-   342B     |    242B
+|  tar.gz    |  ruby zlib  |
+|--------------------------|
+|   342B     |    242B     |
 
 ### Unzip
 
