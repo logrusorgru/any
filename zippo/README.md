@@ -5,13 +5,13 @@ Example Ruby GZ Arch
 
 For compress:
 
-```ruby
+```bash
 ruby zippo.rb gz /path/to/file.ext
 ```
 
 For decompress:
 
-```ruby
+```bash
 ruby zippo.rb unz /path/to/file.gz
 ```
 
