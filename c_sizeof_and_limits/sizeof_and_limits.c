@@ -20,7 +20,8 @@ int main(int argc, char const *argv[])
 		so_s_char, so_u_char,
 		so_float,
 		so_double,
-		so_l_double;
+		so_l_double,
+		so_pointer;
 
 	// integer
 	short _short;
@@ -73,6 +74,7 @@ int main(int argc, char const *argv[])
 	so_float = sizeof(_float);
 	so_double = sizeof(_double);
 	so_l_double = sizeof(_l_double);
+	so_pointer = sizeof(&_int);
 
 	puts("");
 	puts(" TYPE                  SIZE |       MIN*        MAX");
@@ -106,6 +108,11 @@ int main(int argc, char const *argv[])
 	printf(" float:               %3d   |  %2.3e   %2.3e\n", so_float, (double)FLT_MIN, (double)FLT_MAX);
 	printf(" double:              %3d   |  %2.2e   %2.2e\n", so_double, DBL_MIN, DBL_MAX);
 	printf(" long double:         %3d   |  %2.1Le   %2.1Le\n", so_l_double, LDBL_MIN, LDBL_MAX);
+	separator();
+	puts(" POINTER:");
+	separator();
+	printf(" pointer:             %3d\n", so_pointer);
+	separator();
 	puts("");
 	puts(" * - MIN is minimum or value closest to zero");
 	puts("");
