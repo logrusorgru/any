@@ -3,8 +3,12 @@
 # fizzbuzz.rb
 
 (1..100).each do |i|
-	i = 'fizzbuzz' if i % 15 == 0
-	i = 'fizz' if i % 3 == 0
-	i = 'buzz' if i % 5 == 0
+	if i % 15 == 0
+		i = 'fizzbuzz'
+	elsif	i % 3 == 0
+		i = 'fizz'
+	elsif i % 5 == 0
+		i = 'buzz'
+	end
 	puts i
 end
