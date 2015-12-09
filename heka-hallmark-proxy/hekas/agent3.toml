@@ -1,0 +1,12 @@
+
+[ScollectorInput]
+
+[HallmarkEncoder]
+hallmark        = 'token-shpoken'
+hostname        = 'agent3'   # optional set the hostname
+
+[TcpOutput]
+message_matcher = 'TRUE'
+use_framing     = false
+encoder         = 'HallmarkEncoder'
+address         = '127.0.0.1:9000' # proxy address

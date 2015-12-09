@@ -1,0 +1,16 @@
+
+# proxy listener
+net  = "tcp"
+bind = "127.0.0.1:9000"
+
+# agent1 & agent2
+[[users]]
+hallmark = "token-poken"
+net      = "tcp"
+address  = "127.0.0.1:9001" # destination (Heka destiantion)
+
+# agent3
+[[users]]
+hallmark = "token-shpoken"
+net      = "tcp"
+address  = "127.0.0.1:9002" # destination

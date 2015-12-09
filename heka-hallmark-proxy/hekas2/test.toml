@@ -1,0 +1,135 @@
+
+[ProcStats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/proc/stat"
+decoder = "ProcStatDecoder"
+
+[ProcStatDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/linux_procstat.lua"
+
+[ProcStatFilter]
+type = "SandboxFilter"
+filename = "lua_filters/procstat.lua"
+preserve_data = true
+message_matcher = "Type=='stats.procstat'"
+
+	[ProcStatFilter.config]
+    whitelist = "^[^i]"
+    extras = true
+    percent_integer = true
+
+[DiskSdaStats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda1Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda1/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda2Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda2/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda3Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda3/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda4Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda4/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda5Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda5/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda6Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda6/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskSda7Stats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/sys/block/sda/sda7/stat"
+decoder = "DiskStatsDecoder"
+
+[DiskStatsDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/linux_diskstats.lua"
+
+[LoadAvg]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/proc/loadavg"
+decoder = "LoadAvgDecoder"
+
+[LoadAvgDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/linux_loadavg.lua"
+
+[MemStats]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/proc/meminfo"
+decoder = "MemStatsDecoder"
+
+[MemStatsDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/linux_memstats.lua"
+
+[Netdev]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/proc/net/dev"
+decoder = "NetdevDecoder"
+
+[NetdevDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/linux_netdev.lua"
+
+[NetNetstat]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/proc/net/netstat"
+decoder = "NetstatDecoder"
+
+[NetSnmp]
+type = "FilePollingInput"
+ticker_interval = 15
+file_path = "/proc/net/snmp"
+decoder = "NetstatDecoder"
+
+[NetstatDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/linux_netstat.lua"
+
+[InfluxdbLineEncoder]
+type = "SandboxEncoder"
+filename = "lua_encoders/schema_influx_line.lua"
+
+    [InfluxdbLineEncoder.config]
+    skip_fields = "**all_base** FilePath NumProcesses Environment TickerInterval"
+    tag_fields = "Hostname Type"
+    timestamp_precision= "s"
+
+[InfluxdbOutput]
+type = "HttpOutput"
+message_matcher = "Type != 'stats.procstat'"
+encoder = "InfluxdbLineEncoder"
+address = "http://127.0.0.1:8086/write?db=heka&precision=s"
+

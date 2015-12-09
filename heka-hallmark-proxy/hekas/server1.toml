@@ -1,0 +1,32 @@
+
+##
+## recieve remote messages
+##
+
+[HallmarkSplitter]
+use_message_bytes = true # required
+
+[ProtobufDecoder]
+
+[TcpInput]
+address  ="127.0.0.1:9001"
+splitter = 'HallmarkSplitter'
+decoder  = 'ProtobufDecoder' # default for TcpInput
+
+##
+## send to InfluxDB
+##
+
+[ScollectorInfluxdbLineEncoder]
+type = "SandboxEncoder"
+filename = "lua_encoders/scollector-influx.lua"
+
+    [ScollectorInfluxdbLineEncoder.config]
+    timestamp_precision= "s"
+
+[InfluxdbOutput]
+type = "HttpOutput"
+message_matcher = 'Logger=="scollector"' # use only for scollectors messages
+encoder = "ScollectorInfluxdbLineEncoder"
+address = "http://127.0.0.1:8086/write?db=server1&precision=s&u=user1&p=psw1"
+# DB-name: server1, username: user1, password: psw1

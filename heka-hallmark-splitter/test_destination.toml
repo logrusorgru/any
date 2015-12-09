@@ -1,0 +1,18 @@
+
+# sudo -u heka hekad -config test_destination.toml
+
+[HallmarkSplitter]
+use_message_bytes = true
+
+[ProtobufDecoder]
+
+[TcpInput]
+splitter = 'HallmarkSplitter'
+decoder  = 'ProtobufDecoder' # default for TcpInput
+address  = '127.0.0.1:9000'
+
+[RstEncoder]
+
+[LogOutput]
+message_matcher = 'TRUE'
+encoder         = 'RstEncoder'

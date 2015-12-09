@@ -1,0 +1,13 @@
+
+# sudo -u heka hekad -config test_source.toml
+
+[ScollectorInput]
+
+[HallmarkEncoder]
+hallmark        = 'token-poken'
+
+[TcpOutput]
+message_matcher = 'TRUE'
+use_framing     = false
+encoder         = 'HallmarkEncoder'
+address         = '127.0.0.1:9000'

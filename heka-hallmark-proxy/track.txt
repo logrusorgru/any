@@ -1,0 +1,163 @@
+Scollector -> Heka -> Proxy -> Heka -> InfluxDB -> Grafana
+==========================================================
+
+.Clean up
+
+- Remove Heka sources and installed package.
+
+.Build heka from source
+
+You can copy-paste code below into terminal and go drink coffee.
+
+[source,bash]
+----
+cd ~
+rm -rf ~/heka
+git clone https://github.com/mozilla-services/heka
+cd heka
+cat > cmake/plugin_loader.cmake << EOF
+add_external_plugin(git https://github.com/logrusorgru/heka-scollector-input master)
+add_external_plugin(git https://github.com/logrusorgru/heka-hallmark-encoder master)
+add_external_plugin(git https://github.com/logrusorgru/heka-hallmark-splitter master)
+EOF
+wget -O sandbox/lua/encoders/scollector-influx.lua https://raw.githubusercontent.com/logrusorgru/heka-scollector-input/master/scollector-influx.lua
+source env.sh
+go get bosun.org/cmd/scollector/collectors
+go get bosun.org/cmd/scollector/conf
+go get bosun.org/opentsdb
+go get github.com/BurntSushi/toml
+go get github.com/pborman/uuid
+go get github.com/golang/protobuf/...
+source build.sh
+make deb
+sudo dpkg -i heka_0.11.0_amd64.deb
+----
+
+.Proxy
+
+Close current terminal and open it again.
+
+[source,bash]
+----
+go get -d github.com/logrusorgru/heka-hallmark-proxy
+cd $GOPATH/src/github.com/logrusorgru/heka-hallmark-proxy
+go build
+----
+
+.There are
+* 1 proxy server (listen on 9000 port)
+* 2 heka servers (listen on 9001 and 9002 respectively)
+* 3 heka agents
+
+The scheme
+[source,txt]
+----
+           [proxy]
+agent1 ----[~~\  ]
+           [   >~]-----> server1
+agent2-----[~~/  ]
+           [     ]
+agent3-----[~~~~~]-----> server2
+
+----
+
+.Configs
+- proxy config: +test.toml+
+- server 1: +hekas/server1.toml+
+- server 2: +hekas/server2.toml+
+- agent 1: +hekas/agent1.toml+
+- agent 2: +hekas/agent2.toml+
+- agent 3: +hekas/agent3.toml+
+
+.Configure InfluxDB
+
+[source,bash]
+----
+influx
+----
+
+Create databses
+
+[source,sql]
+----
+CREATE DATABASE "server1"
+CREATE DATABASE "server2"
+SHOW DATABASES
+----
+
+Create users
+
+[source,sql]
+----
+CREATE USER user1 WITH PASSWORD 'psw1'
+CREATE USER user2 WITH PASSWORD 'psw2'
+SHOW USERS
+----
+
+Grant
+
+[source,sql]
+----
+GRANT ALL ON server1 TO user1
+GRANT ALL ON server2 TO user2
+SHOW GRANTS FOR user1
+SHOW GRANTS FOR user2
+----
+
+Leave InfluxDB cli
+[source,bash]
+----
+exit
+----
+
+.Run
+
+[source,bash]
+----
+sudo pwd
+----
+
+[source,bash]
+----
+nohup ./heka-hallmark-proxy -config test.toml > proxy.log 2>&1 &
+sudo -u heka nohup hekad -config hekas/server1.toml > server1.log 2>&1 &
+sudo -u heka nohup hekad -config hekas/server2.toml > server2.log 2>&1 &
+sudo -u heka nohup hekad -config hekas/agent1.toml > agent1.log 2>&1 &
+sudo -u heka nohup hekad -config hekas/agent2.toml > agent2.log 2>&1 &
+sudo -u heka nohup hekad -config hekas/agent3.toml > agent3.log 2>&1 &
+----
+
+The values in the database appeared. Now you can kill the processes.
+
+[source,bash]
+----
+sudo pkill -KILL -f heka
+----
+
+.Grafana
+
+.Create two datasources:
+- Server1
+  * databse: server1
+  * user: user1
+  * psw: psw1
+- Server2
+  * database: server2
+  * user: user2
+  * psw: psw2
+
+The Server1 and the Server2 are names of datasources.
+
+.Add measurements to dashboard:
+- create new dashboard
+- click: "dashboard managmnent" (gear)
+- click "View as JSON"
+- copy-paste the +hekas/dashboard.json+ file content to textarea
+- close JSON-view
+- click "save dashboard"
+
+.Note
+
+The first chart is measurements from the first server. From the first and second agent. On the second chart, the measurements from the second server. From agent # 3. You can see how looks the query to the database.
+
+Of course this is not a final decision.

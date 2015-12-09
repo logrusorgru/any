@@ -1,0 +1,36 @@
+syntax="proto3";
+
+package frame;
+
+// [bt delim][bt hl][h hm(bytes) ml(int32)][bt delim][ msg ]
+
+// max header length is 255 byte
+// mesage_length 1-5byte
+// max hallmark = 250 byte
+message Header {
+	bytes hallmark       = 1; // max 250
+	int32 message_length = 2; // mesage length
+}
+
+// TODO:
+//
+// batch
+//
+// [RECORD_SEPARATOR       1 byte]
+// [HEADER LENGTH          1 byte]
+// [HEADER            <= 255 byte]
+//   [HALLMARK        <= 246 byte]
+//   [BATCH LENGTH       1-9 byte]
+// [UNIT SEPARATOR         1 byte]
+// [MESSAGE LENGTH       1-5 byte]
+// [MESSAGE                      ]
+// [UNIT SEPARATOR         1 byte]
+// [MESSAGE LENGTH       1-5 byte]
+// [MESSAGE                      ]
+// [UNIT SEPARATOR         1 byte]
+// [MESSAGE LENGTH       1-5 byte]
+// [MESSAGE                      ]
+// [UNIT SEPARATOR         1 byte]
+// [MESSAGE LENGTH       1-5 byte]
+// [MESSAGE                      ]
+// [ETC                          ]
